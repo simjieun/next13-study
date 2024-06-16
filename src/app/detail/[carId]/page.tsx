@@ -1,24 +1,24 @@
-"use client";
-
-import { getCarData } from "@/app/api/cars/route";
 import Image from "next/image";
 import React from "react";
 import dayjs from "dayjs";
 import "dayjs/locale/ko";
+import { getCarDatas } from "@/lib/datas";
+import { redirect } from "next/navigation";
 dayjs.locale("ko");
 
 interface Props {
   params: { carId: string };
 }
-// detail 정보 불러와야 한다
-// fetch 이용 (매번 갱신될 필요는 없다고 봄, 10분에 한 번?)
 
-function DetailPage({ params }: Props) {
-  const carData = getCarData(params.carId) || {};
+async function DetailPage({ params }: Props) {
+  const carId = params.carId;
+  const detailInfo = getCarDatas().find((v) => v.id === carId);
 
-  const { image, maker, regDate, carNo, year, region, distance, price } =
-    carData;
-  console.log("[carData]:", carData, params.carId);
+  if (!detailInfo) {
+    redirect("/");
+  }
+
+  const { timestamp } = detailInfo;
 
   return (
     <div>
@@ -26,6 +26,7 @@ function DetailPage({ params }: Props) {
       <div style={{ display: "flex", flexDirection: "column" }}>
         호출시간
         <div>{dayjs().format("YYYY-MM-DD ddd HH:mm:ss")}</div>
+        <strong>서버의 타임스탬프 : {timestamp}</strong>
       </div>
       <Image
         src={

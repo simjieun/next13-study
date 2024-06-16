@@ -2,19 +2,17 @@ import Image from "next/image";
 import Link from "next/link";
 import Filter from "@/component/Filter";
 import styles from "./page.module.css";
-import { CAR_TYPE } from "./api/cars/route";
 import dayjs from "dayjs";
 import "dayjs/locale/ko";
+import { getCarDatas } from "@/lib/datas";
+
 dayjs.locale("ko");
 
-const getData = async () => {
-  const responses = await fetch("http://localhost:3000/api/cars");
-  return (await responses.json()) as CAR_TYPE;
-};
+export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const carDatas = await getData();
-
+  const carDatas = await getCarDatas();
+  const { timestamp } = carDatas[0];
   return (
     <main className={styles.main}>
       <header className={styles.header}>
@@ -26,9 +24,10 @@ export default async function Home() {
         <div style={{ display: "flex", flexDirection: "column" }}>
           호출시간
           <div>{dayjs().format("YYYY-MM-DD ddd HH:mm:ss")}</div>
+          <div>
+            <strong>서버의 타임스탬프 : {timestamp}</strong>
+          </div>
         </div>
-        <button className={styles.cacheBtn}>캐시비우기</button>
-        <button className={styles.cacheBtn}>새로고침</button>
       </div>
       <section className={styles.contents}>
         <Filter />
