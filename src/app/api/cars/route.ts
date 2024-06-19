@@ -1,7 +1,9 @@
-export const dynamic = "force-dynamic";
+import { getCarDatas } from "@/lib/datas";
+import { NextRequest, NextResponse } from "next/server";
 
-import { NextResponse } from "next/server";
-
-export const GET = () => {
-  return NextResponse.json("success", { status: 200 });
+const GET = async (_: NextRequest) => {
+  const data = getCarDatas();
+  return NextResponse.json(data, { status: 200 });
 };
+
+export { GET };

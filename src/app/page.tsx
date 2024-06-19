@@ -4,15 +4,31 @@ import Filter from "@/component/Filter";
 import styles from "./page.module.css";
 import dayjs from "dayjs";
 import "dayjs/locale/ko";
-import { getCarDatas } from "@/lib/datas";
+import localizedFormat from "dayjs/plugin/localizedFormat";
+import { CAR_TYPE } from "@/constants/car";
+// import UpdateCacheButton from "@/component/UpdateCacheButton";
 
 dayjs.locale("ko");
+dayjs.extend(localizedFormat);
 
-export const dynamic = "force-dynamic";
+const MAIN_TAG = "MAIN";
+
+const fetchCars = async () => {
+  const response = await fetch(`http://localhost:3000/api/cars`, {
+    next: { revalidate: 30 },
+    // next: { tags: [MAIN_TAG] },
+  });
+  // api route에 딜레이 주면 loading.tsx 적용 안 됨
+  await new Promise((resolve) => setTimeout(resolve, 3000));
+  const data = (await response.json()) as CAR_TYPE[];
+  console.log("[data]:", data);
+  return data;
+};
 
 export default async function Home() {
-  const carDatas = await getCarDatas();
+  const carDatas = await fetchCars();
   const { timestamp } = carDatas[0];
+
   return (
     <main className={styles.main}>
       <header className={styles.header}>
@@ -25,8 +41,12 @@ export default async function Home() {
           호출시간
           <div>{dayjs().format("YYYY-MM-DD ddd HH:mm:ss")}</div>
           <div>
-            <strong>서버의 타임스탬프 : {timestamp}</strong>
+            <strong>
+              서버의 타임스탬프 :{dayjs(timestamp).format("LLLL")}분<br />
+              {dayjs(timestamp).format("ss")}초
+            </strong>
           </div>
+          {/* <UpdateCacheButton tag={MAIN_TAG} /> */}
         </div>
       </div>
       <section className={styles.contents}>
@@ -43,13 +63,13 @@ export default async function Home() {
               firstDate,
               region,
               distance,
-              id,
+              carId,
               price,
             }) => (
-              <li className={styles.car_list} key={id}>
-                <Link href={`/detail/${id}`} className={styles.link}>
+              <li className={styles.car_list} key={`car-${carId}`}>
+                <Link href={`/detail/${carId}`} className={styles.link}>
                   <Image
-                    src={image.url}
+                    src={image.thumbnail}
                     alt={image.alt}
                     width={185}
                     height={150}

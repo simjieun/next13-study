@@ -2,40 +2,51 @@ import Image from "next/image";
 import React from "react";
 import dayjs from "dayjs";
 import "dayjs/locale/ko";
-import { getCarDatas } from "@/lib/datas";
+import localizedFormat from "dayjs/plugin/localizedFormat";
+import styles from "./page.module.css";
 import { redirect } from "next/navigation";
+import { CAR_TYPE } from "@/constants/car";
 dayjs.locale("ko");
+dayjs.extend(localizedFormat);
 
 interface Props {
   params: { carId: string };
 }
 
-async function DetailPage({ params }: Props) {
-  const carId = params.carId;
-  const detailInfo = getCarDatas().find((v) => v.id === carId);
+const fetchData = async (carId: string) => {
+  // force-cache : Data Cache를 계속 사용 - 새로고침해도 API 호출 다시 하지 않음
+  // no-store :  새로 고침시마다 API 호출한다.
+  const response = await fetch(`http://localhost:3000/api/detail/${carId}`, {
+    cache: "no-store",
+  });
+  const data = (await response.json()) as CAR_TYPE;
+  return data;
+};
 
-  if (!detailInfo) {
+async function DetailPage({ params }: Props) {
+  const carInfo = await fetchData(params.carId);
+
+  if (!carInfo) {
     redirect("/");
   }
 
-  const { timestamp } = detailInfo;
+  const {
+    timestamp,
+    image: { detailImages },
+  } = carInfo;
 
   return (
     <div>
-      디테일페이지
       <div style={{ display: "flex", flexDirection: "column" }}>
-        호출시간
-        <div>{dayjs().format("YYYY-MM-DD ddd HH:mm:ss")}</div>
-        <strong>서버의 타임스탬프 : {timestamp}</strong>
+        <strong>
+          서버에 페이지 생성 호출한 시간 : <br />
+          {dayjs(timestamp).format("LLLL")}분<br />
+          {dayjs(timestamp).format("ss")}초
+        </strong>
       </div>
-      <Image
-        src={
-          "https://ci.encar.com/carpicture/carpicture05/pic3725/37257690_001.jpg?impolicy=heightRate&rh=138&cw=185&ch=138&cg=Center&wtmk=http://ci.encar.com/wt_mark/w_mark_04.png&wtmkg=SouthEast&wtmkw=70&wtmkh=30&t=20240417092209"
-        }
-        alt="이미지"
-        width={100}
-        height={100}
-      />
+      <div className={styles.carImage}>
+        <Image src={detailImages[0]} alt="이미지" fill />
+      </div>
     </div>
   );
 }
