@@ -36,18 +36,21 @@ async function DetailPage({ params }: Props) {
   } = carInfo;
 
   return (
-    <div>
-      <div style={{ display: "flex", flexDirection: "column" }}>
+    <>
+      <div className={styles.testZone}>
         <strong>
           서버에 페이지 생성 호출한 시간 : <br />
-          {dayjs(timestamp).format("LLLL")}분<br />
-          {dayjs(timestamp).format("ss")}초
+          <span>
+            {dayjs(timestamp).format("LLLL")}분 {dayjs(timestamp).format("ss")}
+            초
+          </span>
         </strong>
+        <button className={styles.buyBtn}>장바구니에 담기</button>
       </div>
       <div className={styles.carImage}>
         <Image src={detailImages[0]} alt="이미지" fill />
       </div>
-    </div>
+    </>
   );
 }
 

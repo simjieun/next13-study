@@ -6,6 +6,7 @@ import dayjs from "dayjs";
 import "dayjs/locale/ko";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import { CAR_TYPE } from "@/constants/car";
+import Header from "@/component/Header";
 // import UpdateCacheButton from "@/component/UpdateCacheButton";
 
 dayjs.locale("ko");
@@ -16,12 +17,12 @@ const MAIN_TAG = "MAIN";
 const fetchCars = async () => {
   const response = await fetch(`http://localhost:3000/api/cars`, {
     next: { revalidate: 30 },
+    // cache: "force-cache",
     // next: { tags: [MAIN_TAG] },
   });
   // api route에 딜레이 주면 loading.tsx 적용 안 됨
   await new Promise((resolve) => setTimeout(resolve, 3000));
   const data = (await response.json()) as CAR_TYPE[];
-  console.log("[data]:", data);
   return data;
 };
 
@@ -31,11 +32,7 @@ export default async function Home() {
 
   return (
     <main className={styles.main}>
-      <header className={styles.header}>
-        <Link href="/intro" className={styles.more_btn}>
-          자세히 보기
-        </Link>
-      </header>
+      <Header />
       <div className={styles.cacheContainer}>
         <div style={{ display: "flex", flexDirection: "column" }}>
           호출시간

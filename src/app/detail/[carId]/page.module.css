@@ -1,5 +1,18 @@
+.testZone {
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+}
 .carImage {
-  max-width: 1160px;
-  height: 653px;
   position: relative;
+  width: 800px;
+  margin: 0 auto;
+  aspect-ratio: 16/9;
+}
+.buyBtn {
+  padding: 5px 10px;
+  background-color: white;
+  border-radius: 8px;
+  border: 1px solid black;
+  cursor: pointer;
 }
