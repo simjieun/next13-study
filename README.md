@@ -26,5 +26,7 @@
 # 참고해볼만한 것들
 
 [Next의 서버렌더링 전략] https://nextjs.org/docs/app/building-your-application/rendering/server-components#server-rendering-strategies
+
 [Next의 Data fetching / Cache] https://nextjs.org/docs/app/building-your-application/data-fetching/fetching-caching-and-revalidating
+
 [Route Handler] https://nextjs.org/docs/app/building-your-application/routing/route-handlers
