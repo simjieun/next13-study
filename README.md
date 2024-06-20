@@ -30,3 +30,11 @@
 [Next의 Data fetching / Cache] https://nextjs.org/docs/app/building-your-application/data-fetching/fetching-caching-and-revalidating
 
 [Route Handler] https://nextjs.org/docs/app/building-your-application/routing/route-handlers
+
+
+제출은
+week3 브랜치에
+이름으로 폴더 생성하여 코드 업로드 해주심 되겠습니다!
+ex)  폴더경로 seungchan/소스는 여기에 
+
+제가 놓친 부분이나 과제의 난이도 / 양 / 진행방식 / 업로드 방법에 대해 피드백 주실 부분은 편히 전달해주세요.
