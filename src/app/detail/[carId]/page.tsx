@@ -19,6 +19,7 @@ const fetchData = async (carId: string) => {
   const response = await fetch(`http://localhost:3000/api/detail/${carId}`, {
     cache: "no-store",
   });
+  await new Promise((resolve) => setTimeout(resolve, 3000));
   const data = (await response.json()) as CAR_TYPE;
   return data;
 };
@@ -45,9 +46,9 @@ async function DetailPage({ params }: Props) {
             초
           </span>
         </strong>
-        <button className={styles.buyBtn}>장바구니에 담기</button>
       </div>
       <div className={styles.carImage}>
+        <button className={styles.buyBtn}>장바구니에 담기</button>
         <Image src={detailImages[0]} alt="이미지" fill />
       </div>
     </>
