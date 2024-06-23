@@ -6,6 +6,7 @@ import localizedFormat from "dayjs/plugin/localizedFormat";
 import styles from "./page.module.css";
 import { redirect } from "next/navigation";
 import { CAR_TYPE } from "@/constants/car";
+import Link from "next/link";
 dayjs.locale("ko");
 dayjs.extend(localizedFormat);
 
@@ -34,6 +35,7 @@ async function DetailPage({ params }: Props) {
   const {
     timestamp,
     image: { detailImages },
+    carId
   } = carInfo;
 
   return (
@@ -49,7 +51,7 @@ async function DetailPage({ params }: Props) {
       </div>
       <div className={styles.carImage}>
         <button className={styles.buyBtn}>장바구니에 담기</button>
-        <Image src={detailImages[0]} alt="이미지" fill />
+        <Link href={`/cars/${carId}`}><Image src={detailImages[0]} alt="이미지" fill /></Link>
       </div>
     </>
   );
